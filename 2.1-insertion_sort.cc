@@ -1,10 +1,10 @@
 #include "std.h"
 
-void insertion_sort(int *A, int length) {
-  for (int j = 1; j < length; j++) {
+void insertion_sort(array &A) {
+  for (int j = 2; j <= A.length; j++) {
     int key = A[j];
     int i = j - 1;
-    while (i >= 0 && key < A[i]) {
+    while (i > 0 && key < A[i]) {
       A[i + 1] = A[i];
       --i;
     }
@@ -13,13 +13,13 @@ void insertion_sort(int *A, int length) {
 }
 
 int main() {
-  array<10> A;
+  array A(10);
   A.randomize();
 
   printf("before: ");
   A.print();
 
-  insertion_sort(A.data, A.size);
+  insertion_sort(A);
 
   printf("after : ");
   A.print();
