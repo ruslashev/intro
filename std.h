@@ -5,38 +5,39 @@
 
 #define die(...) do { printf(__VA_ARGS__); puts(""); exit(1); } while (0)
 
-class array {
-  int *_data;
-  array& operator=(array other) {
+template <typename T>
+class gen_array {
+  T *_data;
+  gen_array& operator=(gen_array other) {
     this->swap(other);
     return *this;
   }
-  void swap(array& other) {
+  void swap(gen_array& other) {
     std::swap(_data, other._data);
     std::swap(length, other.length);
   }
 public:
   size_t length;
-  array(size_t n_length) try : length(n_length) {
-    _data = new int [length];
+  gen_array(size_t n_length) try : length(n_length) {
+    _data = new T [length];
   } catch (...) {
-    die("array: failed to allocate memory");
+    die("gen_array: failed to allocate memory");
   }
-  array(const array &other) try {
+  gen_array(const gen_array &other) try {
     length = other.length;
-    _data = new int [length];
+    _data = new T [length];
     std::memcpy(_data, other._data, length);
   } catch (...) {
-    die("array: failed to allocate memory for copy");
+    die("gen_array: failed to allocate memory for copy");
   }
-  ~array() {
+  ~gen_array() {
     delete [] _data;
   }
-  int& operator[](size_t i) {
+  T& operator[](size_t i) {
     if (i >= 1 && i <= length)
       return _data[i - 1];
     else
-      die("array: indexing array out of bounds (%d)\n", i);
+      die("gen_array: indexing array out of bounds (%d)", i);
   }
   void randomize() {
     randomize(1, 50);
@@ -51,4 +52,6 @@ public:
     printf("\n");
   }
 };
+
+typedef gen_array<int> array;
 
