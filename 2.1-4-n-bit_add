@@ -4,3 +4,4 @@ n-bit-add(A, B)
     t = A[i] + B[i] + carry
     carry = max(0, t - 1)
     C[i] = t mod 2
+
