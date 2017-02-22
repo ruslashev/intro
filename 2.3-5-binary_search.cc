@@ -45,13 +45,28 @@ value bsearch(array &A, int v, int p, int r) {
   }
 }
 
+value bsearch_iter(array &A, int v, int p, int r) {
+  value result;
+  while (p <= r) {
+    int q = (p + r) / 2;
+    if (v == A[q]) {
+      result = q;
+      break;
+    } if (v < A[q])
+      r = q - 1;
+    else if (v > A[q])
+      p = q + 1;
+  }
+  return result;
+}
+
 int main() {
   array A = { 1, 2, 3, 4, 5, 6, 7 };
 
   printf("before: ");
   A.print();
 
-  value x = bsearch(A, 6, 1, A.length);
+  value x = bsearch_iter(A, 6, 1, A.length);
   x.print();
 }
 
