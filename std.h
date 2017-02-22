@@ -23,6 +23,15 @@ public:
   } catch (...) {
     die("gen_array: failed to allocate memory");
   }
+  gen_array(std::initializer_list<T> l) try {
+    length = l.size();
+    _data = new T [length];
+    size_t j = 0;
+    for (const auto &i : l)
+      _data[j++] = i;
+  } catch (...) {
+    die("gen_array: failed to allocate memory from initializer list");
+  }
   gen_array(const gen_array &other) try {
     length = other.length;
     _data = new T [length];
