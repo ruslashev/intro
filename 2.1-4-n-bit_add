@@ -1,0 +1,6 @@
+n-bit-add(A, B)
+  carry = 0
+  for i = 1 to A.length
+    t = A[i] + B[i] + carry
+    carry = max(0, t - 1)
+    C[i] = t mod 2
