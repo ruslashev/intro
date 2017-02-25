@@ -4,9 +4,10 @@ struct value {
   int v;
   bool inf;
   value() : inf(true) {}
-  value* operator=(int n_v) {
+  value& operator=(int n_v) {
     v = n_v;
     inf = false;
+    return *this;
   }
   bool operator<=(const value &o) {
     if (inf)

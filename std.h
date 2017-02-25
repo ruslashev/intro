@@ -46,7 +46,7 @@ public:
     if (i >= 1 && i <= length)
       return _data[i - 1];
     else
-      die("gen_array: indexing array out of bounds (%d)", i);
+      die("gen_array: indexing array out of bounds (%d)", (int)i);
   }
   void randomize() {
     randomize(1, 50);
@@ -69,9 +69,10 @@ struct mvalue {
   int v;
   bool nil;
   mvalue() : nil(true) {}
-  mvalue* operator=(int n_v) {
+  mvalue& operator=(int n_v) {
     v = n_v;
     nil = false;
+    return *this;
   }
   void print() {
     if (nil)
@@ -87,4 +88,5 @@ void selection_sort(array &A);
 void merge_sort(array &A);
 mvalue bsearch(array &A, int v);
 bool sum_exists(array &S, int x);
+int inversions(array &A);
 
