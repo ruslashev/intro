@@ -64,3 +64,27 @@ public:
 
 typedef gen_array<int> array;
 
+// maybe value
+struct mvalue {
+  int v;
+  bool nil;
+  mvalue() : nil(true) {}
+  mvalue* operator=(int n_v) {
+    v = n_v;
+    nil = false;
+  }
+  void print() {
+    if (nil)
+      puts("nil");
+    else
+      printf("%d\n", v);
+  }
+};
+
+mvalue search(array &A, int v);
+void insertion_sort(array &A);
+void selection_sort(array &A);
+void merge_sort(array &A);
+mvalue bsearch(array &A, int v);
+bool sum_exists(array &S, int x);
+

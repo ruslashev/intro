@@ -54,16 +54,3 @@ void merge_sort(varray &A, int p, int r) {
   }
 }
 
-int main() {
-  varray A(10);
-  A.randomize();
-
-  printf("before: ");
-  A.print();
-
-  merge_sort(A, 1, A.length);
-
-  printf("after : ");
-  A.print();
-}
-

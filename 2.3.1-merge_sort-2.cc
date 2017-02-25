@@ -1,6 +1,6 @@
 #include "std.h"
 
-void merge(array &A, int p, int q, int r) {
+static void merge(array &A, int p, int q, int r) {
   int ll = q - p + 1, rl = r - q;
   array L(ll), R(rl);
   for (int i = 1; i <= ll; ++i)
@@ -24,7 +24,7 @@ void merge(array &A, int p, int q, int r) {
     A[k++] = L[i++];
 }
 
-void merge_sort(array &A, int p, int r) {
+static void merge_sort(array &A, int p, int r) {
   if (p < r) {
     int q = (p + r) / 2;
     merge_sort(A, p, q);
@@ -33,16 +33,7 @@ void merge_sort(array &A, int p, int r) {
   }
 }
 
-int main() {
-  array A(11);
-  A.randomize();
-
-  printf("before: ");
-  A.print();
-
+void merge_sort(array &A) {
   merge_sort(A, 1, A.length);
-
-  printf("after : ");
-  A.print();
 }
 

@@ -1,21 +1,5 @@
 #include "std.h"
 
-struct value {
-  int v;
-  bool nil;
-  value() : nil(true) {}
-  value* operator=(int n_v) {
-    v = n_v;
-    nil = false;
-  }
-  void print() {
-    if (nil)
-      puts("nil");
-    else
-      printf("%d\n", v);
-  }
-};
-
 /* binary-search(A, v, p, r)
  *   if p < r
  *     q = floor((p + r) / 2)
@@ -30,7 +14,7 @@ struct value {
  *       return nil
  */
 
-value bsearch(array &A, int v, int p, int r) {
+static mvalue bsearch(array &A, int v, int p, int r) {
   if (p < r) {
     int q = (p + r) / 2;
     if (v <= A[q])
@@ -38,15 +22,15 @@ value bsearch(array &A, int v, int p, int r) {
     else
       return bsearch(A, v, q + 1, r);
   } else {
-    value result;
+    mvalue result;
     if (A[p] == v)
       result = p;
     return result;
   }
 }
 
-value bsearch_iter(array &A, int v, int p, int r) {
-  value result;
+static mvalue bsearch_iter(array &A, int v, int p, int r) {
+  mvalue result;
   while (p <= r) {
     int q = (p + r) / 2;
     if (v == A[q]) {
@@ -60,13 +44,7 @@ value bsearch_iter(array &A, int v, int p, int r) {
   return result;
 }
 
-int main() {
-  array A = { 1, 2, 3, 4, 5, 6, 7 };
-
-  printf("before: ");
-  A.print();
-
-  value x = bsearch_iter(A, 6, 1, A.length);
-  x.print();
+mvalue bsearch(array &A, int v) {
+  return bsearch_iter(A, v, 1, A.length);
 }
 

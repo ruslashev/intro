@@ -9,16 +9,3 @@ void selection_sort(array &A) {
         std::swap(A[i], A[j]);
 }
 
-int main() {
-  array A(10);
-  A.randomize();
-
-  printf("before: ");
-  A.print();
-
-  selection_sort(A);
-
-  printf("after : ");
-  A.print();
-}
-

@@ -12,16 +12,3 @@ void insertion_sort(array &A) {
   }
 }
 
-int main() {
-  array A(10);
-  A.randomize();
-
-  printf("before: ");
-  A.print();
-
-  insertion_sort(A);
-
-  printf("after : ");
-  A.print();
-}
-
