@@ -2,8 +2,15 @@
 
 #include <fstream>
 #include <cstring>
+#include <climits>
 
 #define die(...) do { printf(__VA_ARGS__); puts(""); exit(1); } while (0)
+
+const int neginf = INT_MIN, inf = INT_MAX;
+
+static int rand_in_range(int min, int max) {
+  return min + rand() % (max - min + 1);
+}
 
 template <typename T>
 class gen_array {
@@ -48,12 +55,22 @@ public:
     else
       die("gen_array: indexing array out of bounds (%d)", (int)i);
   }
+  void randomize(int min, int max) {
+    for (size_t i = 0; i < length; i++)
+      _data[i] = rand_in_range(min, max);
+  }
   void randomize() {
     randomize(1, 50);
   }
-  void randomize(int min, int max) {
-    for (size_t i = 0; i < length; i++)
-      _data[i] = min + rand() % (max - min + 1);
+  void randomize_walk(int min, int max) {
+    int prev = 0;
+    for (size_t i = 0; i < length; i++) {
+      _data[i] = prev + rand_in_range(min, max);
+      prev = _data[i];
+    }
+  }
+  void randomize_walk() {
+    randomize_walk(-3, 5);
   }
   void print() {
     for (size_t i = 0; i < length; i++)
@@ -82,6 +99,10 @@ struct mvalue {
   }
 };
 
+struct subarray {
+  int start, end, sum;
+};
+
 mvalue search(array &A, int v);
 void insertion_sort(array &A);
 void selection_sort(array &A);
@@ -89,4 +110,5 @@ void merge_sort(array &A);
 mvalue bsearch(array &A, int v);
 bool sum_exists(array &S, int x);
 int inversions(array &A);
+subarray find_maximum_subarray(array &A);
 
