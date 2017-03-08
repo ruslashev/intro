@@ -111,4 +111,5 @@ mvalue bsearch(array &A, int v);
 bool sum_exists(array &S, int x);
 int inversions(array &A);
 subarray find_maximum_subarray(array &A);
+subarray find_maximum_subarray_lin(array &A);
 
