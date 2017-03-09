@@ -51,6 +51,38 @@ inline unsigned int log(const unsigned long long x) {
 }
 // 5 end
 
+// 6 (untested)
+unsigned int log2_bth(unsigned int v) {
+  const unsigned int b[] = { 0x2, 0xC, 0xF0, 0xFF00, 0xFFFF0000 };
+  const unsigned int S[] = { 1, 2, 4, 8, 16 };
+  int i;
+
+  unsigned int r = 0;
+  // unroll for speed...
+  for (i = 4; i >= 0; i--) {
+    if (v & b[i]) {
+      v >>= S[i];
+      r |= S[i];
+    }
+  }
+  return r;
+}
+// 6 end
+
+// 7 (untested)
+unsigned int log2_slow_branch(unsigned int v) {
+  unsigned int r;
+  unsigned int shift;
+
+  r =     (v > 0xFFFF) << 4; v >>= r;
+  shift = (v > 0xFF  ) << 3; v >>= shift; r |= shift;
+  shift = (v > 0xF   ) << 2; v >>= shift; r |= shift;
+  shift = (v > 0x3   ) << 1; v >>= shift; r |= shift;
+  r |= (v >> 1);
+  return r;
+}
+// 7 end
+
 // suppressing unused variable warnings
 /*
 void log2_benchmark() {
