@@ -103,6 +103,70 @@ struct subarray {
   int start, end, sum;
 };
 
+template <typename T>
+class gen_matrix {
+  T *_data;
+  gen_matrix& operator=(gen_matrix other) {
+    this->swap(other);
+    return *this;
+  }
+  void swap(gen_matrix& other) {
+    std::swap(_data, other._data);
+    std::swap(rows, other.rows);
+  }
+public:
+  size_t rows;
+  gen_matrix(size_t n_rows) try : rows(n_rows) {
+    _data = new T [rows * rows];
+  } catch (...) {
+    die("gen_matrix: failed to allocate memory");
+  }
+  /*
+  gen_matrix(std::initializer_list<T> l) try {
+    rows = l.size();
+    _data = new T [rows];
+    size_t j = 0;
+    for (const auto &i : l)
+      _data[j++] = i;
+  } catch (...) {
+    die("gen_matrix: failed to allocate memory from initializer list");
+  }
+  */
+  gen_matrix(const gen_matrix &other) try {
+    rows = other.rows;
+    _data = new T [rows * rows];
+    std::memcpy(_data, other._data, rows * rows);
+  } catch (...) {
+    die("gen_matrix: failed to allocate memory for copy");
+  }
+  ~gen_matrix() {
+    delete [] _data;
+  }
+  T& at(size_t y, size_t x) {
+    if (y >= 1 && y <= rows && x >= 1 && x <= rows)
+      return _data[y * rows + x];
+    else
+      die("gen_matrix: indexing array out of bounds (%d, %d)", (int)y, (int)x);
+  }
+  void randomize(int min, int max) {
+    for (size_t y = 0; y < rows; y++)
+      for (size_t x = 0; x < rows; x++)
+        at(y, x) = rand_in_range(min, max);
+  }
+  void randomize() {
+    randomize(1, 50);
+  }
+  void print() {
+    for (size_t y = 0; y < rows; y++) {
+      for (size_t x = 0; x < rows; x++)
+        printf("%d ", at(y, x));
+      printf("\n");
+    }
+  }
+};
+
+typedef gen_matrix<int> matrix;
+
 mvalue search(array &A, int v);
 void insertion_sort(array &A);
 void selection_sort(array &A);
@@ -112,4 +176,5 @@ bool sum_exists(array &S, int x);
 int inversions(array &A);
 subarray find_maximum_subarray(array &A);
 subarray find_maximum_subarray_lin(array &A);
+matrix square_matrix_mult(matrix &A, matrix &B);
 
