@@ -42,6 +42,8 @@ inline uint32_t log2(const uint32_t x) {
 }
 // 4 end
 
+// suppressing unused variable warnings
+/*
 void log2_benchmark() {
   int iterations = 1e7, range = 1e6;
   auto begin = std::chrono::high_resolution_clock::now(),
@@ -87,4 +89,10 @@ void log2_benchmark() {
   printf("iterations: %d, range: %d\n", iterations, range);
   printf("t1=%f\nt2=%f\nt3=%f\nt4=%f\n", t1, t2, t3, t4);
 }
+*/
+/* t1 = 61.145902
+ * t2 = 29.526843
+ * t3 = 17.163491
+ * t4 = 18.976887
+ */
 
