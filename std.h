@@ -27,6 +27,8 @@ public:
   size_t length;
   gen_array(size_t n_length) try : length(n_length) {
     _data = new T [length];
+    for (size_t i = 0; i < length; i++)
+      _data[i] = i + 1;
   } catch (...) {
     die("gen_array: failed to allocate memory");
   }
@@ -177,4 +179,5 @@ int inversions(array &A);
 subarray find_maximum_subarray(array &A);
 subarray find_maximum_subarray_lin(array &A);
 matrix square_matrix_mult(matrix &A, matrix &B);
+void randomize_in_place(array &A);
 
