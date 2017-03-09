@@ -42,6 +42,15 @@ inline uint32_t log2(const uint32_t x) {
 }
 // 4 end
 
+// 5 (untested)
+inline unsigned int log(const unsigned long long x) {
+  if (x)
+    return (31 - __builtin_clzll(x));
+  else
+    return 0;
+}
+// 5 end
+
 // suppressing unused variable warnings
 /*
 void log2_benchmark() {
