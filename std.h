@@ -180,4 +180,6 @@ subarray find_maximum_subarray(array &A);
 subarray find_maximum_subarray_lin(array &A);
 matrix square_matrix_mult(matrix &A, matrix &B);
 void randomize_in_place(array &A);
+int coin_streak(int n);
+void log2_benchmark();
 
