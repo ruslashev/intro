@@ -1,7 +1,7 @@
 #include "std.h"
 
 matrix square_matrix_mult(matrix &A, matrix &B) {
-  matrix C(A.rows);
+  matrix C(A.rows, A.rows);
   for (size_t y = 1; y <= A.rows; y++) {
     for (size_t x = 1; x <= A.rows; x++) {
       int c = 0;

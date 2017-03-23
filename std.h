@@ -23,7 +23,7 @@ public:
   gen_array(size_t n_length) try : length(n_length) {
     _data = new T [length];
   } catch (...) {
-    die("gen_array: failed to allocate memory");
+    die("gen_array: failed to allocate memory for constructor");
   }
   gen_array(std::initializer_list<T> l) try : length(l.size()) {
     _data = new T [length];
@@ -33,21 +33,24 @@ public:
   } catch (...) {
     die("gen_array: failed to allocate memory from initializer list");
   }
-  gen_array(const gen_array &other) try {
+  gen_array(const gen_array &other) {
     operator=(other);
-  } catch (...) {
-    die("gen_array: failed to allocate memory for copy");
   }
   ~gen_array() {
-    delete [] _data;
-  }
-  gen_array& operator=(const gen_array &other) {
-    length = other.length;
     if (!_data)
       delete [] _data;
-    _data = new T [length];
-    std::memcpy(_data, other._data, other.length * sizeof(T));
-    return *this;
+  }
+  gen_array& operator=(const gen_array &other) {
+    try {
+      length = other.length;
+      if (!_data)
+        delete [] _data;
+      _data = new T [length];
+      std::memcpy(_data, other._data, other.length * sizeof(T));
+    } catch (...) {
+      die("gen_array: failed to allocate memory for assignment copy");
+      return *this;
+    }
   }
   T& operator[](size_t i) {
     if (i >= 1 && i <= length)
@@ -108,6 +111,75 @@ template <typename T>
 class gen_matrix {
   T *_data;
 public:
+  size_t rows, columns;
+  gen_matrix() : _data(nullptr), rows(0) {};
+  gen_matrix(size_t n_rows, size_t n_columns) try
+    : rows(n_rows)
+    , columns(n_columns) {
+    _data = new T [rows * columns];
+  } catch (...) {
+    die("gen_matrix: failed to allocate memory for constructor");
+  }
+  gen_matrix(size_t n_rows, size_t n_columns, std::initializer_list<T> l) try
+    : rows(n_rows)
+    , columns(n_columns) {
+    _data = new T [rows * columns];
+    size_t i = 0;
+    for (const auto &e : l)
+      _data[i++] = e;
+  } catch (...) {
+    die("gen_matrix: failed to allocate memory for initializer list");
+  }
+  gen_matrix(const gen_matrix &other) {
+    operator=(other);
+  }
+  ~gen_matrix() {
+    if (!_data)
+      delete [] _data;
+  }
+  gen_matrix& operator=(gen_matrix other) {
+    try {
+      rows = other.rows;
+      columns = other.columns;
+      if (!_data)
+        delete [] _data;
+      _data = new T [rows * columns];
+      std::memcpy(_data, other._data, other.rows * other.columns * sizeof(T));
+    } catch (...) {
+      die("gen_matrix: failed to allocate memory for assignment copy");
+    }
+    return *this;
+  }
+  T& at(size_t y, size_t x) {
+    if (y >= 1 && y <= rows && x >= 1 && x <= columns)
+      return _data[(y - 1) * columns + (x - 1)];
+    else
+      die("gen_matrix: indexing matrix out of bounds (%d, %d)", (int)y, (int)x);
+  }
+  void randomize(int min, int max) {
+    for (size_t y = 1; y <= rows; ++y)
+      for (size_t x = 1; x <= columns; ++x)
+        at(y, x) = rand_in_range(min, max);
+  }
+  void randomize() {
+    randomize(1, 50);
+  }
+  void print() {
+    for (size_t y = 1; y <= rows; ++y) {
+      for (size_t x = 1; x <= columns; ++x)
+        printf("%d\t", at(y, x));
+      printf("\n");
+    }
+  }
+};
+
+typedef gen_matrix<int> matrix;
+
+/*
+template <typename T>
+class gen_sq_matrix {
+  T *_data;
+public:
   size_t rows;
   gen_matrix() : _data(nullptr), rows(0);
   gen_matrix(size_t n_rows) try : rows(n_rows) {
@@ -153,8 +225,7 @@ public:
     }
   }
 };
-
-typedef gen_matrix<int> matrix;
+*/
 
 template <typename T>
 class gen_heap {
@@ -271,6 +342,7 @@ public:
 
 typedef gen_heap<int> heap;
 
+/*
 template <typename T>
 class gen_priority_queue : public gen_heap<T> {
 public:
@@ -300,6 +372,12 @@ public:
     _data[heap_size] = neginf;
     increase_key(heap_size, k);
   }
+};
+*/
+
+template <typename T>
+class young_tableau {
+public:
 };
 
 mvalue search(array &A, int v);
