@@ -2,12 +2,9 @@
 #include <cmath>
 
 int main() {
-  // heap h({ 1, 2, 3, 4, 5 });
-  // h.print();
-  array a(10);
-  a.randomize();
-  a.print();
-  merge_sort(a);
-  a.print();
+  array a(32);
+  a.randomize(1, 150);
+  heap h(a);
+  h.print();
 }
 

@@ -3,6 +3,7 @@
 #include <fstream>
 #include <cstring>
 #include <climits>
+#include <vector>
 
 #define die(...) do { printf(__VA_ARGS__); puts(""); exit(1); } while (0)
 
@@ -165,12 +166,37 @@ typedef gen_matrix<int> matrix;
 template <typename T>
 class gen_heap {
   gen_array<T> _data;
+  int _print(size_t idx, bool is_left, int offset, int depth, std::vector<std::string> &s) {
+    if (idx > heap_size)
+      return 0;
+    std::string node_info = std::to_string(_data[idx]);
+    int node_info_w = (int)node_info.size();
+
+    int left_w = _print(left(idx), 1, offset, depth + 1, s);
+    int right_w = _print(right(idx), 0, offset + left_w + node_info_w, depth + 1, s);
+
+    for (int i = 0; i < node_info_w; i++)
+      s[2 * depth][offset + left_w + i] = node_info[i];
+
+    if (depth && is_left) {
+      for (int i = 0; i < node_info_w + right_w - 1; i++)
+        s[2 * depth - 2][offset + left_w + node_info_w/2 + i + 1] = '_';
+      s[2 * depth - 1][offset + left_w + node_info_w/2] = '/';
+    } else if (depth && !is_left) {
+      for (int i = 0; i < left_w + node_info_w - 3; i++)
+        s[2 * depth - 2][offset - node_info_w/2 + i + 1] = '_';
+      s[2 * depth - 1][offset + left_w + node_info_w/2 - 1] = '\\';
+    }
+
+    return left_w + node_info_w + right_w;
+  }
 public:
   size_t heap_size;
-  gen_heap(/* const */ gen_array<T> A) : _data(A) {
-    A.print();
-    _data.print();
-    heap_size = A.length;
+  gen_heap() : heap_size(0) {}
+  gen_heap(const gen_array<T> &A) : _data(A), heap_size(A.length) {
+    build_max_heap();
+  }
+  gen_heap(std::initializer_list<T> l) : _data(l), heap_size(l.size()) {
     build_max_heap();
   }
   size_t parent(size_t i) {
@@ -217,12 +243,21 @@ public:
   }
   void build_max_heap() {
     for (size_t i = heap_size / 2; i >= 1; --i)
-      max_heapify_rec(i);
+      max_heapify(i);
   }
-  void print() {
-    for (size_t i = 1; i <= heap_size; ++i)
-      printf("%d ", _data[i]);
-    puts("");
+  size_t depth() {
+    size_t i = 1, depth = 0;
+    while (i <= heap_size) {
+      i = left(i);
+      ++depth;
+    }
+    return depth;
+  }
+  void print(size_t width = 80) {
+    std::vector<std::string> s(depth() * 2 - 1, std::string(width, ' '));
+    _print(1, 0, 0, 0, s);
+    for (size_t i = 0; i < depth() * 2 - 1; ++i)
+      printf("%s\n", s[i].c_str());
   }
 };
 

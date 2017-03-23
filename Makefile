@@ -1,4 +1,4 @@
 all:
-	g++ *.cc -o out -Wall
+	g++ *.cc -o out -Wall -g
 	./out
 
