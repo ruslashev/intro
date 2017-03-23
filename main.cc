@@ -2,8 +2,12 @@
 #include <cmath>
 
 int main() {
-  int throws = 1e6;
-  printf("throws: %d\nstreak: %d\nlog2 = %f\n", throws, coin_streak(throws),
-      std::log2(throws));
+  // heap h({ 1, 2, 3, 4, 5 });
+  // h.print();
+  array a(10);
+  a.randomize();
+  a.print();
+  merge_sort(a);
+  a.print();
 }
 
