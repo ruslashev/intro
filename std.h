@@ -107,38 +107,29 @@ struct subarray {
 template <typename T>
 class gen_matrix {
   T *_data;
-  gen_matrix& operator=(gen_matrix other) {
-    std::swap(_data, other._data);
-    std::swap(rows, other.rows);
-    return *this;
-  }
 public:
   size_t rows;
+  gen_matrix() : _data(nullptr), rows(0);
   gen_matrix(size_t n_rows) try : rows(n_rows) {
     _data = new T [rows * rows];
   } catch (...) {
     die("gen_matrix: failed to allocate memory");
   }
-  /*
-  gen_matrix(std::initializer_list<T> l) try {
-    rows = l.size();
-    _data = new T [rows];
-    size_t j = 0;
-    for (const auto &i : l)
-      _data[j++] = i;
-  } catch (...) {
-    die("gen_matrix: failed to allocate memory from initializer list");
-  }
-  */
   gen_matrix(const gen_matrix &other) try {
-    rows = other.rows;
-    _data = new T [rows * rows];
-    std::memcpy(_data, other._data, rows * rows);
+    operator=(other);
   } catch (...) {
     die("gen_matrix: failed to allocate memory for copy");
   }
   ~gen_matrix() {
     delete [] _data;
+  }
+  gen_matrix& operator=(gen_matrix other) {
+    rows = other.rows;
+    if (!_data)
+      delete [] _data;
+    _data = new T [rows * rows];
+    std::memcpy(_data, other._data, other.rows * other.rows * sizeof(T));
+    return *this;
   }
   T& at(size_t y, size_t x) {
     if (y >= 1 && y <= rows && x >= 1 && x <= rows)
@@ -167,6 +158,7 @@ typedef gen_matrix<int> matrix;
 
 template <typename T>
 class gen_heap {
+protected:
   gen_array<T> _data;
   int _print(size_t idx, bool is_left, int offset, int depth, std::vector<std::string> &s) {
     if (idx > heap_size)
@@ -278,6 +270,37 @@ public:
 };
 
 typedef gen_heap<int> heap;
+
+template <typename T>
+class gen_priority_queue : public gen_heap<T> {
+public:
+  T maximum() {
+    return _data[1];
+  }
+  T extract_max() {
+    if (heap_size < 1)
+      die("heap underflow");
+    T max = _data[1];
+    _data[1] = _data[heap_size];
+    --heap_size;
+    max_heapify(1);
+    return max;
+  }
+  void increase_key(size_t i, T k) {
+    if (k < _data[i])
+      die("new key is smalller than current");
+    _data[i] = k;
+    while (i > 1 && A[parent(i)] < A[i]) {
+      std::swap(A[i], A[parent(i)]);
+      i = parent(i);
+    }
+  }
+  void insert(T k) {
+    ++heap_size;
+    _data[heap_size] = neginf;
+    increase_key(heap_size, k);
+  }
+};
 
 mvalue search(array &A, int v);
 void insertion_sort(array &A);
