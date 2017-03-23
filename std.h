@@ -4,6 +4,7 @@
 #include <cstring>
 #include <climits>
 #include <vector>
+#include <cmath>
 
 #define die(...) do { printf(__VA_ARGS__); puts(""); exit(1); } while (0)
 
@@ -72,9 +73,10 @@ public:
     randomize_walk(-3, 5);
   }
   void print() {
+    printf("[");
     for (size_t i = 0; i < length; i++)
-      printf("%d ", _data[i]);
-    printf("\n");
+      printf("%d%s", _data[i], i == length - 1 ? "" : " ");
+    printf("]\n");
   }
 };
 
@@ -245,6 +247,19 @@ public:
     for (size_t i = heap_size / 2; i >= 1; --i)
       max_heapify(i);
   }
+  void heapsort() {
+    for (size_t i = heap_size; i >= 2; --i) {
+      std::swap(_data[1], _data[i]);
+      --heap_size;
+      max_heapify(1);
+    }
+  }
+  size_t height() {
+    if (heap_size == 0)
+      return 0;
+    else
+      return std::floor(std::log2(heap_size));
+  }
   size_t depth() {
     size_t i = 1, depth = 0;
     while (i <= heap_size) {
@@ -254,6 +269,7 @@ public:
     return depth;
   }
   void print(size_t width = 80) {
+    _data.print();
     std::vector<std::string> s(depth() * 2 - 1, std::string(width, ' '));
     _print(1, 0, 0, 0, s);
     for (size_t i = 0; i < depth() * 2 - 1; ++i)
@@ -276,4 +292,5 @@ matrix square_matrix_mult(matrix &A, matrix &B);
 void randomize_in_place(array &A);
 int coin_streak(int n);
 void log2_benchmark();
+void heapsort(array &A);
 

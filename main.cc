@@ -3,8 +3,11 @@
 
 int main() {
   array a(32);
-  a.randomize(1, 150);
+  a.randomize();
+  a.print();
   heap h(a);
+  h.print();
+  h.heapsort();
   h.print();
 }
 
