@@ -453,4 +453,5 @@ void randomize_in_place(array &A);
 int coin_streak(int n);
 void log2_benchmark();
 void heapsort(array &A);
+void quicksort(array &A);
 
