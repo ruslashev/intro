@@ -373,6 +373,65 @@ public:
       youngify(smallest_y, smallest_x);
     }
   }
+  void insert(T k) {
+    // decrease_key(rows, columns, k);
+    _data.at(_data.rows, _data.columns) = k;
+  }
+  void decrease_key(size_t i, size_t j, T k) {
+    if (_data.at(i, j) <= k)
+      die("error");
+    _data.at(i, j) = k;
+    T threshold = inf;
+    size_t largest_i = i, largest_j = j;
+    while ((i > 1 || j > 1) && _data.at(i, j) < threshold) {
+      std::swap(_data.at(i, j), _data.at(largest_i, largest_j));
+      i = largest_i;
+      j = largest_j;
+      if (i - 1 >= 1 && _data.at(i, j) < _data.at(i - 1, j)) {
+        largest_i = i - 1;
+        largest_j = j;
+      }
+      if (j - 1 >= 1 && _data.at(i, j) < _data.at(i, j - 1)) {
+        largest_i = i;
+        largest_j = j - 1;
+      }
+      threshold = _data.at(largest_i, largest_j);
+    }
+  }
+  void youngify_rev(size_t y, size_t x) {
+    size_t largest_y = y, largest_x = x;
+    if (y - 1 >= 1 && _data.at(y, x) < _data.at(y - 1, x)) {
+      largest_y = y - 1;
+      largest_x = x;
+    }
+    if (x - 1 >= 1 && _data.at(y, x) < _data.at(y, x - 1)) {
+      largest_y = y;
+      largest_x = x - 1;
+    }
+    if (largest_y != y || largest_x != x) {
+      std::swap(_data.at(y, x), _data.at(largest_y, largest_x));
+      youngify_rev(largest_y, largest_x);
+    }
+  }
+  bool search(T k) {
+    size_t y = 1, x = _data.columns;
+    while (1) {
+      T element = _data.at(y, x);
+      if (element == k)
+        return true;
+      else if (element > k) {
+        if (x > 1)
+          --x;
+        else
+          return false;
+      } else if (element < k) {
+        if (y < _data.rows)
+          ++y;
+        else
+          return false;
+      }
+    }
+  }
   void print() {
     _data.print();
   }
