@@ -439,6 +439,10 @@ public:
 
 typedef gen_young_tableau<int> young_tableau;
 
+struct interval {
+  float l, r;
+};
+
 mvalue search(array &A, int v);
 void insertion_sort(array &A);
 void selection_sort(array &A);
@@ -454,4 +458,6 @@ int coin_streak(int n);
 void log2_benchmark();
 void heapsort(array &A);
 void quicksort(array &A);
+void randomized_quicksort(array &A);
+void fuzzy_sort(gen_array<interval> &A);
 
