@@ -461,4 +461,6 @@ void quicksort(array &A);
 void randomized_quicksort(array &A);
 // void fuzzy_sort(gen_array<interval> &A);
 void counting_sort(array &A);
+void preprocess_count_integers_in_range(array &A, std::vector<int> &C, int &max);
+int count_integers_in_range(array &A, array &C, int max, int a, int b, int &n);
 
