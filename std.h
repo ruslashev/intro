@@ -459,5 +459,6 @@ void log2_benchmark();
 void heapsort(array &A);
 void quicksort(array &A);
 void randomized_quicksort(array &A);
-void fuzzy_sort(gen_array<interval> &A);
+// void fuzzy_sort(gen_array<interval> &A);
+void counting_sort(array &A);
 
