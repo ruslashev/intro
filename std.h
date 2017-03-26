@@ -49,8 +49,8 @@ public:
       std::memcpy(_data, other._data, other.length * sizeof(T));
     } catch (...) {
       die("gen_array: failed to allocate memory for assignment copy");
-      return *this;
     }
+    return *this;
   }
   T& operator[](size_t i) {
     if (i >= 1 && i <= length)
@@ -167,7 +167,10 @@ public:
   void print() {
     for (size_t y = 1; y <= rows; ++y) {
       for (size_t x = 1; x <= columns; ++x)
-        printf("%d\t", at(y, x));
+        if (at(y, x) == inf)
+          printf("inf\t");
+        else
+          printf("%d\t", at(y, x));
       printf("\n");
     }
   }
@@ -323,15 +326,59 @@ public:
 
 typedef gen_max_priority_queue<int> max_priority_queue;
 
-/*
 template <typename T>
-class young_tableau {
+class gen_young_tableau {
   gen_matrix<T> _data;
 public:
   size_t records;
-  young_tableau()
+  gen_young_tableau(size_t rows, size_t columns)
+    : _data(rows, columns)
+    , records(0) {
+    for (size_t y = 1; y <= rows; ++y)
+      for (size_t x = 1; x <= columns; ++x)
+        _data.at(y, x) = inf;
+  }
+  gen_young_tableau(size_t rows, size_t columns, gen_array<T> array_elems)
+    : gen_young_tableau(rows, columns) {
+    gen_array<T> array_copy = array_elems;
+    insertion_sort(array_copy);
+    for (size_t i = 1, y = 1; y <= rows; ++y)
+      for (size_t x = 1; x <= columns; ++x)
+        _data.at(y, x) = i <= array_copy.length ? array_copy[i++] : inf;
+  }
+  bool empty() {
+    return _data.at(1, 1) == inf;
+  }
+  bool full() {
+    return _data.at(_data.rows, _data.columns) < inf;
+  }
+  T extract_min() {
+    T val = _data.at(1, 1);
+    _data.at(1, 1) = inf;
+    youngify(1, 1);
+    return val;
+  }
+  void youngify(size_t y, size_t x) {
+    size_t smallest_y = y, smallest_x = x;
+    if (y + 1 <= _data.rows && _data.at(y + 1, x) < _data.at(y, x)) {
+      smallest_y = y + 1;
+      smallest_x = x;
+    }
+    if (x + 1 <= _data.columns && _data.at(y, x + 1) < _data.at(y, x)) {
+      smallest_y = y;
+      smallest_x = x + 1;
+    }
+    if (smallest_y != y || smallest_x != x) {
+      std::swap(_data.at(y, x), _data.at(smallest_y, smallest_x));
+      youngify(smallest_y, smallest_x);
+    }
+  }
+  void print() {
+    _data.print();
+  }
 };
-*/
+
+typedef gen_young_tableau<int> young_tableau;
 
 mvalue search(array &A, int v);
 void insertion_sort(array &A);
