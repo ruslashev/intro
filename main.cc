@@ -3,9 +3,9 @@
 
 int main() {
   array A(20);
-  A.randomize();
+  A.randomize(10, 99);
   A.print();
-  counting_sort(A);
+  radix_sort(A);
   A.print();
 }
 
