@@ -1,11 +1,6 @@
 #include "std.h"
-#include <cmath>
+#include <chrono>
 
 int main() {
-  array A(20);
-  A.randomize(10, 99);
-  A.print();
-  radix_sort(A);
-  A.print();
 }
 

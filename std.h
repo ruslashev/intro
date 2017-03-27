@@ -52,11 +52,19 @@ public:
     }
     return *this;
   }
-  T& operator[](size_t i) {
+  T& operator[](size_t i) const {
     if (i >= 1 && i <= length)
       return _data[i - 1];
     else
       die("gen_array: indexing array out of bounds (%d)", (int)i);
+  }
+  inline bool operator==(const gen_array<T> &o) {
+    if (length != o.length)
+      return false;
+    for (size_t i = 1; i < length; ++i)
+      if (_data[i - 1] != o[i])
+        return false;
+    return true;
   }
   void randomize(int min, int max) {
     for (size_t i = 0; i < length; i++)
@@ -459,6 +467,7 @@ void log2_benchmark();
 void heapsort(array &A);
 void quicksort(array &A);
 void randomized_quicksort(array &A);
+void quicksort_hoare(array &A);
 // void fuzzy_sort(gen_array<interval> &A);
 void counting_sort(array &A);
 void preprocess_count_integers_in_range(array &A, std::vector<int> &C, int &max);
