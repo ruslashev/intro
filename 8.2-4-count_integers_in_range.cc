@@ -11,7 +11,7 @@ void preprocess_count_integers_in_range(array &A, std::vector<int> &C, int &max)
     C[i] += C[i - 1];
 }
 
-int count_integers_in_range(array &A, array &C, int max, int a, int b, int &n) {
+int count_integers_in_range(array &A, array &C, int max, int a, int b) {
   if (a > b || b < 0 || a > max || A.length == 0)
     return 0;
   int sum = a <= 0 ? C[0] : 0;

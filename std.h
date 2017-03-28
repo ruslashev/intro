@@ -471,6 +471,7 @@ void quicksort_hoare(array &A);
 // void fuzzy_sort(gen_array<interval> &A);
 void counting_sort(array &A);
 void preprocess_count_integers_in_range(array &A, std::vector<int> &C, int &max);
-int count_integers_in_range(array &A, array &C, int max, int a, int b, int &n);
+int count_integers_in_range(array &A, array &C, int max, int a, int b);
 void radix_sort(array &A);
+void in_place_counting_sort(array &A);
 
