@@ -29,7 +29,7 @@ void minmax(array A, int &min, int &max) {
       min = std::min(min, fst);
     }
   }
-  printf("c=%d\n", c);
+  printf("c=%d\n", (int)c);
 }
 
 void minmax_naive(array A, int &min, int &max) {
@@ -41,6 +41,6 @@ void minmax_naive(array A, int &min, int &max) {
     max = std::max(max, A[i]);
     min = std::min(min, A[i]);
   }
-  printf("c=%d\n", c);
+  printf("c=%d\n", (int)c);
 }
 

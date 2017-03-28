@@ -476,4 +476,6 @@ void radix_sort(array &A);
 void in_place_counting_sort(array &A);
 void minmax(array A, int &min, int &max);
 int second_smallest(array A);
+int randomized_select(array A, size_t i);
+int randomized_select_iterative(array A, size_t i);
 

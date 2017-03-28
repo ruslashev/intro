@@ -2,9 +2,8 @@
 #include <chrono>
 
 int main() {
-  array A(19);
-  A.randomize(1, 32);
+  array A(20);
+  A.randomize();
   A.print();
-  printf("second_smallest(A)=%d\n", second_smallest(A));
 }
 
