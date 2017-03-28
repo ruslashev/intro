@@ -474,4 +474,6 @@ void preprocess_count_integers_in_range(array &A, std::vector<int> &C, int &max)
 int count_integers_in_range(array &A, array &C, int max, int a, int b);
 void radix_sort(array &A);
 void in_place_counting_sort(array &A);
+void minmax(array A, int &min, int &max);
+int second_smallest(array A);
 
