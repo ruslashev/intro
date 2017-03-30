@@ -67,7 +67,7 @@ public:
     return true;
   }
   void randomize(int min, int max) {
-    for (size_t i = 0; i < length; i++)
+    for (size_t i = 0; i < length; ++i)
       _data[i] = rand_in_range(min, max);
   }
   void randomize() {
@@ -75,7 +75,7 @@ public:
   }
   void randomize_walk(int min, int max) {
     int prev = 0;
-    for (size_t i = 0; i < length; i++) {
+    for (size_t i = 0; i < length; ++i) {
       _data[i] = prev + rand_in_range(min, max);
       prev = _data[i];
     }
@@ -83,9 +83,17 @@ public:
   void randomize_walk() {
     randomize_walk(-3, 5);
   }
+  void sequence() {
+    for (size_t i = 0; i < length; ++i)
+      _data[i] = i + 1;
+  }
+  void scramble() {
+    for (size_t i = 0; i < length; ++i)
+      std::swap(_data[i], _data[rand_in_range(0, length - 1)]);
+  }
   void print() {
     printf("[");
-    for (size_t i = 0; i < length; i++)
+    for (size_t i = 0; i < length; ++i)
       printf("%d%s", _data[i], i == length - 1 ? "" : " ");
     printf("]\n");
   }
@@ -199,15 +207,15 @@ protected:
     int left_w = _print(left(idx), 1, offset, depth + 1, s);
     int right_w = _print(right(idx), 0, offset + left_w + node_info_w, depth + 1, s);
 
-    for (int i = 0; i < node_info_w; i++)
+    for (int i = 0; i < node_info_w; ++i)
       s[2 * depth][offset + left_w + i] = node_info[i];
 
     if (depth && is_left) {
-      for (int i = 0; i < node_info_w + right_w - 1; i++)
+      for (int i = 0; i < node_info_w + right_w - 1; ++i)
         s[2 * depth - 2][offset + left_w + node_info_w/2 + i + 1] = '_';
       s[2 * depth - 1][offset + left_w + node_info_w/2] = '/';
     } else if (depth && !is_left) {
-      for (int i = 0; i < left_w + node_info_w - 3; i++)
+      for (int i = 0; i < left_w + node_info_w - 3; ++i)
         s[2 * depth - 2][offset - node_info_w/2 + i + 1] = '_';
       s[2 * depth - 1][offset + left_w + node_info_w/2 - 1] = '\\';
     }
