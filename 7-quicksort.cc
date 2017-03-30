@@ -1,14 +1,12 @@
 #include "std.h"
 
 static size_t partition(array &A, size_t p, size_t r) {
-  size_t i = p - 1;
+  size_t i = p;
   for (size_t j = p; j <= r - 1; ++j)
-    if (A[j] <= A[r]) {
-      ++i;
-      std::swap(A[i], A[j]);
-    }
-  std::swap(A[i + 1], A[r]);
-  return i + 1;
+    if (A[j] <= A[r])
+      std::swap(A[i++], A[j]);
+  std::swap(A[i], A[r]);
+  return i;
 }
 
 static void quicksort(array &A, size_t p, size_t r) {
