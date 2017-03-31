@@ -459,6 +459,65 @@ struct interval {
   float l, r;
 };
 
+// untested
+#if 0
+template <typename T>
+struct lcrs_tree_node {
+  T val;
+  lcrs_tree_node *parent, *left, *right;
+  lcrs_tree_node(const T &n_val, lcrs_tree_node *n_parent = nullptr
+      , lcrs_tree_node *n_right = nullptr, lcrs_tree_node *n_left = nullptr)
+    : val(n_val), parent(n_parent), left(n_left), right(n_right) {}
+  void add_child(const T &c_val) {
+    if (left == nullptr)
+      left = new lcrs_tree_node(c_val, this);
+    else {
+      lcrs_tree_node *w = left;
+      while (w->right != nullptr)
+        w = w->right;
+      w->right = new lcrs_tree_node(c_val, this, w);
+    }
+  }
+  void child(size_t i) {
+    lcrs_tree_node *c = left;
+    while (i-- - 1 != 0)
+      c = c->right;
+    return c;
+  }
+};
+
+template <typename T>
+class heapy_bst {
+  std::vector<T> _data;
+  size_t occupied;
+  void expand(size_t i) {
+    if (i >= _data.size())
+      _data.resize(i + 1);
+  }
+public:
+  heapy_bst() : occupied(0) {}
+  size_t parent(size_t i) {
+    return i / 2;
+  }
+  size_t left(size_t i) {
+    return 2 * i;
+  }
+  size_t right(size_t i) {
+    return 2 * i + 1;
+  }
+  void insert(T val) {
+    if (occupied == 0)
+      _data[1] = val;
+    size_t i = 1, new_idx;
+    if (val < _data[i]) {
+      size_t new_idx = left(i);
+      expand(new_idx);
+      _data[new_idx] = val;
+    }
+  }
+};
+#endif
+
 mvalue search(array &A, int v);
 void insertion_sort(array &A);
 void selection_sort(array &A);
