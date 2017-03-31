@@ -488,4 +488,5 @@ int randomized_select(array A, size_t i);
 int randomized_select_iterative(array A, size_t i);
 int select(array A, size_t i);
 void k_closest_to_median(array A, size_t k);
+// int small_order_select(array A, size_t i);
 
