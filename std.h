@@ -518,6 +518,28 @@ public:
 };
 #endif
 
+template <typename T>
+class bst {
+  bst *left, *right, *parent;
+  T key;
+public:
+  bst(T n_key)
+    : key(n_key)
+    , left(nullptr)
+    , right(nullptr)
+    , parent(nullptr) {}
+  bst(T n_key, bst *n_parent)
+    : key(n_key)
+    , left(nullptr)
+    , right(nullptr)
+    , parent(n_parent) {}
+  bst(T n_key, bst *n_left, bst *n_right, bst *n_parent)
+    : key(n_key)
+    , left(n_left)
+    , right(n_right)
+    , parent(n_parent) {}
+};
+
 mvalue search(array &A, int v);
 void insertion_sort(array &A);
 void selection_sort(array &A);
