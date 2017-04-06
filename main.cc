@@ -1,12 +1,11 @@
 #include "std.h"
+#include "rb_tree.h"
 #include <chrono>
 
 int main() {
-  bst<int> root(10);
+  rb_tree tree;
   for (size_t i = 0; i < 20; ++i)
-    root.insert(rand_in_range(0, 20));
-  root.print();
-  root.delete_node(root.left);
-  root.print();
+    rb_insert(tree, new rb_node(rand_in_range(0, 20)));
+  tree.print();
 }
 

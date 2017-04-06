@@ -518,9 +518,10 @@ public:
 };
 #endif
 
+// should not be used, since some parts (delete) have bugs
 template <typename T>
-class bst {
-  int _print(bst *n, bool is_left, int offset, int depth
+class gen_bst {
+  int _print(gen_bst *n, bool is_left, int offset, int depth
       , std::vector<std::string> &s, size_t width) {
     if (n == nullptr)
       return 0;
@@ -550,19 +551,19 @@ class bst {
     return left_w + node_info_w + right_w;
   }
 public:
-  bst *left, *right, *parent;
+  gen_bst *left, *right, *parent;
   T key;
-  bst(T n_key)
+  gen_bst(T n_key)
     : left(nullptr)
     , right(nullptr)
     , parent(nullptr)
     , key(n_key) {}
-  bst(T n_key, bst *n_parent)
+  gen_bst(T n_key, gen_bst *n_parent)
     : left(nullptr)
     , right(nullptr)
     , parent(n_parent)
     , key(n_key) {}
-  bst(T n_key, bst *n_left, bst *n_right, bst *n_parent)
+  gen_bst(T n_key, gen_bst *n_left, gen_bst *n_right, gen_bst *n_parent)
     : left(n_left)
     , right(n_right)
     , parent(n_parent)
@@ -570,18 +571,18 @@ public:
   void insert_rec(T new_key) {
     if (new_key < key) {
       if (left == nullptr)
-        left = new bst(new_key, this);
+        left = new gen_bst(new_key, this);
       else
         left->insert(new_key);
     } else {
       if (right == nullptr)
-        right = new bst(new_key, this);
+        right = new gen_bst(new_key, this);
       else
         right->insert(new_key);
     }
   }
   void insert(T new_key) {
-    bst *y = nullptr, *x = this;
+    gen_bst *y = nullptr, *x = this;
     while (x != nullptr) {
       y = x;
       if (new_key < x->key)
@@ -590,11 +591,11 @@ public:
         x = x->right;
     }
     if (new_key < y->key)
-      y->left = new bst(new_key, y);
+      y->left = new gen_bst(new_key, y);
     else
-      y->right = new bst(new_key, y);
+      y->right = new gen_bst(new_key, y);
   }
-  void transplant(bst *u, bst *v) {
+  void transplant(gen_bst *u, gen_bst *v) {
     if (u->parent == nullptr)
       u = v;
     else if (u == u->parent->left)
@@ -604,13 +605,13 @@ public:
     if (v != nullptr)
       v->parent = u->parent;
   }
-  void delete_node(bst *z) {
+  void delete_node(gen_bst *z) {
     if (z->left == nullptr)
       transplant(z, z->right);
     else if (z->right == nullptr)
       transplant(z, z->left);
     else {
-      bst *y = z->right->min();
+      gen_bst *y = z->right->min();
       if (y->parent != z) {
         transplant(y, y->right);
         y->right = z->right;
@@ -621,8 +622,8 @@ public:
       y->left->parent = y;
     }
   }
-  bst* search(T query_key) {
-    bst *q = this;
+  gen_bst* search(T query_key) {
+    gen_bst *q = this;
     while (q != nullptr && query_key != q->key)
       if (query_key < q->key)
         q = q->left;
@@ -630,23 +631,23 @@ public:
         q = q->right;
     return q;
   }
-  bst* min() {
-    bst *q = this;
+  gen_bst* min() {
+    gen_bst *q = this;
     while (q->left != nullptr)
       q = q->left;
     return q;
   }
-  bst* max() {
-    bst *q = this;
+  gen_bst* max() {
+    gen_bst *q = this;
     while (q->right != nullptr)
       q = q->right;
     return q;
   }
   T succ() {
-    bst *x = this;
+    gen_bst *x = this;
     if (x->right != nullptr)
       return x->right->min();
-    bst *y = x->parent;
+    gen_bst *y = x->parent;
     while (y != nullptr && x == y->right) {
       x = y;
       y = y->parent;
@@ -654,10 +655,10 @@ public:
     return y->key;
   }
   T pred() {
-    bst *x = this;
+    gen_bst *x = this;
     if (x->left != nullptr)
       return x->left->max();
-    bst *y = x->parent;
+    gen_bst *y = x->parent;
     while (y != nullptr && x == y->left) {
       x = y;
       y = y->parent;
@@ -671,6 +672,8 @@ public:
       printf("%s\n", s[i].c_str());
   }
 };
+
+typedef gen_bst<int> bst;
 
 mvalue search(array &A, int v);
 void insertion_sort(array &A);
