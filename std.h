@@ -567,6 +567,19 @@ public:
     , right(n_right)
     , parent(n_parent)
     , key(n_key) {}
+  void insert_rec(T new_key) {
+    if (new_key < key) {
+      if (left == nullptr)
+        left = new bst(new_key, this);
+      else
+        left->insert(new_key);
+    } else {
+      if (right == nullptr)
+        right = new bst(new_key, this);
+      else
+        right->insert(new_key);
+    }
+  }
   void insert(T new_key) {
     bst *y = nullptr, *x = this;
     while (x != nullptr) {
