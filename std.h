@@ -568,16 +568,44 @@ public:
     , parent(n_parent)
     , key(n_key) {}
   void insert(T new_key) {
-    if (new_key < key) {
-      if (left == nullptr)
-        left = new bst(new_key, this);
+    bst *y = nullptr, *x = this;
+    while (x != nullptr) {
+      y = x;
+      if (new_key < x->key)
+        x = x->left;
       else
-        left->insert(new_key);
-    } else {
-      if (right == nullptr)
-        right = new bst(new_key, this);
-      else
-        right->insert(new_key);
+        x = x->right;
+    }
+    if (new_key < y->key)
+      y->left = new bst(new_key, y);
+    else
+      y->right = new bst(new_key, y);
+  }
+  void transplant(bst *u, bst *v) {
+    if (u->parent == nullptr)
+      u = v;
+    else if (u == u->parent->left)
+      u->parent->left = v;
+    else
+      u->parent->right = v;
+    if (v != nullptr)
+      v->parent = u->parent;
+  }
+  void delete_node(bst *z) {
+    if (z->left == nullptr)
+      transplant(z, z->right);
+    else if (z->right == nullptr)
+      transplant(z, z->left);
+    else {
+      bst *y = z->right->min();
+      if (y->parent != z) {
+        transplant(y, y->right);
+        y->right = z->right;
+        y->right->parent = y;
+      }
+      transplant(z, y);
+      y->left = z->left;
+      y->left->parent = y;
     }
   }
   bst* search(T query_key) {
@@ -589,17 +617,17 @@ public:
         q = q->right;
     return q;
   }
-  T min() {
+  bst* min() {
     bst *q = this;
     while (q->left != nullptr)
       q = q->left;
-    return q->key;
+    return q;
   }
-  T max() {
+  bst* max() {
     bst *q = this;
     while (q->right != nullptr)
       q = q->right;
-    return q->key;
+    return q;
   }
   T succ() {
     bst *x = this;

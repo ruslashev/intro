@@ -6,5 +6,7 @@ int main() {
   for (size_t i = 0; i < 20; ++i)
     root.insert(rand_in_range(0, 20));
   root.print();
+  root.delete_node(root.left);
+  root.print();
 }
 
