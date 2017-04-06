@@ -520,7 +520,6 @@ public:
 
 template <typename T>
 class bst {
-  bst *_left, *_right, *_parent;
   int _print(bst *n, bool is_left, int offset, int depth
       , std::vector<std::string> &s, size_t width) {
     if (n == nullptr)
@@ -528,8 +527,8 @@ class bst {
     std::string node_info = std::to_string(n->key);
     int node_info_w = (int)node_info.size();
 
-    int left_w = _print(n->_left, 1, offset, depth + 1, s, width);
-    int right_w = _print(n->_right, 0, offset + left_w + node_info_w, depth + 1
+    int left_w = _print(n->left, 1, offset, depth + 1, s, width);
+    int right_w = _print(n->right, 0, offset + left_w + node_info_w, depth + 1
         , s, width);
 
     if (2 * (size_t)depth + 1 > s.size())
@@ -551,34 +550,78 @@ class bst {
     return left_w + node_info_w + right_w;
   }
 public:
+  bst *left, *right, *parent;
   T key;
   bst(T n_key)
-    : _left(nullptr)
-    , _right(nullptr)
-    , _parent(nullptr)
+    : left(nullptr)
+    , right(nullptr)
+    , parent(nullptr)
     , key(n_key) {}
   bst(T n_key, bst *n_parent)
-    : _left(nullptr)
-    , _right(nullptr)
-    , _parent(n_parent)
+    : left(nullptr)
+    , right(nullptr)
+    , parent(n_parent)
     , key(n_key) {}
   bst(T n_key, bst *n_left, bst *n_right, bst *n_parent)
-    : _left(n_left)
-    , _right(n_right)
-    , _parent(n_parent)
+    : left(n_left)
+    , right(n_right)
+    , parent(n_parent)
     , key(n_key) {}
   void insert(T new_key) {
     if (new_key < key) {
-      if (_left == nullptr)
-        _left = new bst(new_key, this);
+      if (left == nullptr)
+        left = new bst(new_key, this);
       else
-        _left->insert(new_key);
+        left->insert(new_key);
     } else {
-      if (_right == nullptr)
-        _right = new bst(new_key, this);
+      if (right == nullptr)
+        right = new bst(new_key, this);
       else
-        _right->insert(new_key);
+        right->insert(new_key);
     }
+  }
+  bst* search(T query_key) {
+    bst *q = this;
+    while (q != nullptr && query_key != q->key)
+      if (query_key < q->key)
+        q = q->left;
+      else
+        q = q->right;
+    return q;
+  }
+  T min() {
+    bst *q = this;
+    while (q->left != nullptr)
+      q = q->left;
+    return q->key;
+  }
+  T max() {
+    bst *q = this;
+    while (q->right != nullptr)
+      q = q->right;
+    return q->key;
+  }
+  T succ() {
+    bst *x = this;
+    if (x->right != nullptr)
+      return x->right->min();
+    bst *y = x->parent;
+    while (y != nullptr && x == y->right) {
+      x = y;
+      y = y->parent;
+    }
+    return y->key;
+  }
+  T pred() {
+    bst *x = this;
+    if (x->left != nullptr)
+      return x->left->max();
+    bst *y = x->parent;
+    while (y != nullptr && x == y->left) {
+      x = y;
+      y = y->parent;
+    }
+    return y->key;
   }
   void print(size_t width = 80) {
     std::vector<std::string> s(1, std::string(width, ' '));
