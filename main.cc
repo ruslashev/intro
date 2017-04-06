@@ -2,9 +2,9 @@
 #include <chrono>
 
 int main() {
-  array A(20);
-  A.sequence();
-  A.scramble();
-  A.print();
+  bst<int> root(10);
+  for (size_t i = 0; i < 20; ++i)
+    root.insert(rand_in_range(0, 20));
+  root.print();
 }
 

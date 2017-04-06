@@ -520,24 +520,72 @@ public:
 
 template <typename T>
 class bst {
-  bst *left, *right, *parent;
-  T key;
+  bst *_left, *_right, *_parent;
+  int _print(bst *n, bool is_left, int offset, int depth
+      , std::vector<std::string> &s, size_t width) {
+    if (n == nullptr)
+      return 0;
+    std::string node_info = std::to_string(n->key);
+    int node_info_w = (int)node_info.size();
+
+    int left_w = _print(n->_left, 1, offset, depth + 1, s, width);
+    int right_w = _print(n->_right, 0, offset + left_w + node_info_w, depth + 1
+        , s, width);
+
+    if (2 * (size_t)depth + 1 > s.size())
+      s.resize(2 * depth + 1, std::string(width, ' '));
+
+    for (int i = 0; i < node_info_w; ++i)
+      s[2 * depth][offset + left_w + i] = node_info[i];
+
+    if (depth && is_left) {
+      for (int i = 0; i < node_info_w + right_w - 1; ++i)
+        s[2 * depth - 2][offset + left_w + node_info_w/2 + i + 1] = '_';
+      s[2 * depth - 1][offset + left_w + node_info_w/2] = '/';
+    } else if (depth && !is_left) {
+      for (int i = 0; i < left_w + node_info_w - 3; ++i)
+        s[2 * depth - 2][offset - node_info_w/2 + i + 1] = '_';
+      s[2 * depth - 1][offset + left_w + node_info_w/2 - 1] = '\\';
+    }
+
+    return left_w + node_info_w + right_w;
+  }
 public:
+  T key;
   bst(T n_key)
-    : key(n_key)
-    , left(nullptr)
-    , right(nullptr)
-    , parent(nullptr) {}
+    : _left(nullptr)
+    , _right(nullptr)
+    , _parent(nullptr)
+    , key(n_key) {}
   bst(T n_key, bst *n_parent)
-    : key(n_key)
-    , left(nullptr)
-    , right(nullptr)
-    , parent(n_parent) {}
+    : _left(nullptr)
+    , _right(nullptr)
+    , _parent(n_parent)
+    , key(n_key) {}
   bst(T n_key, bst *n_left, bst *n_right, bst *n_parent)
-    : key(n_key)
-    , left(n_left)
-    , right(n_right)
-    , parent(n_parent) {}
+    : _left(n_left)
+    , _right(n_right)
+    , _parent(n_parent)
+    , key(n_key) {}
+  void insert(T new_key) {
+    if (new_key < key) {
+      if (_left == nullptr)
+        _left = new bst(new_key, this);
+      else
+        _left->insert(new_key);
+    } else {
+      if (_right == nullptr)
+        _right = new bst(new_key, this);
+      else
+        _right->insert(new_key);
+    }
+  }
+  void print(size_t width = 80) {
+    std::vector<std::string> s(1, std::string(width, ' '));
+    _print(this, 0, 0, 0, s, width);
+    for (size_t i = 0; i < s.size(); ++i)
+      printf("%s\n", s[i].c_str());
+  }
 };
 
 mvalue search(array &A, int v);
