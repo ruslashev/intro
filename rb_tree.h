@@ -62,6 +62,44 @@ public:
 };
 
 template <typename T>
+gen_rb_node<T>* tree_minimum(gen_rb_node<T> *x) {
+  while (x->left != nullptr)
+    x = x->left;
+  return x;
+}
+
+template <typename T>
+gen_rb_node<T>* tree_maximum(gen_rb_node<T> *x) {
+  while (x->right != nullptr)
+    x = x->right;
+  return x;
+}
+
+template <typename T>
+gen_rb_node<T>* tree_succ(gen_rb_node<T> *x) {
+  if (x->right != nullptr)
+    return tree_minimum(x->right);
+  gen_rb_node<T> *y = x->parent;
+  while (y != nullptr && x == y->right) {
+    x = y;
+    y = y->parent;
+  }
+  return y;
+}
+
+template <typename T>
+gen_rb_node<T>* tree_pred(gen_rb_node<T> *x) {
+  if (x->left != nullptr)
+    return tree_maximum(x->left);
+  gen_rb_node<T> *y = x->parent;
+  while (y != nullptr && x == y->left) {
+    x = y;
+    y = y->parent;
+  }
+  return y;
+}
+
+template <typename T>
 void left_rotate(gen_rb_tree<T> &t, gen_rb_node<T> *x) {
   gen_rb_node<T> *y = x->right;
   x->right = y->left;
@@ -155,6 +193,106 @@ void rb_insert_fixup(gen_rb_tree<T> &t, gen_rb_node<T> *z) {
       }
     }
   t.root->black = true;
+}
+
+template <typename T>
+void rb_transplant(gen_rb_tree<T> &t, gen_rb_node<T> *u, gen_rb_node<T> *v) {
+  if (u->parent == nullptr)
+    t.root = v;
+  else if (u == u->parent->left)
+    u->parent->left = v;
+  else
+    u->parent->right = v;
+  if (v != nullptr)
+    v->parent = u->parent;
+}
+
+template <typename T>
+void rb_delete(gen_rb_tree<T> &t, gen_rb_node<T> *z) {
+  gen_rb_node<T> *y = z, *x;
+  bool y_orig_color = y->black;
+  if (z->left == nullptr) {
+    x = z->right;
+    rb_transplant(t, z, z->right);
+  } else if (z->right == nullptr) {
+    x = z->left;
+    rb_transplant(t, z, z->left);
+  } else {
+    y = tree_minimum(z->right);
+    y_orig_color = y->black;
+    x = y->right;
+    if (y->parent == z) {
+      if (x != nullptr)
+        x->parent = y;
+    } else {
+      rb_transplant(t, y, y->right);
+      y->right = z->right;
+      y->right->parent = y;
+    }
+    rb_transplant(t, z, y);
+    y->left = z->left;
+    y->left->parent = y;
+    y->black = z->black;
+  }
+  if (y_orig_color == true)
+    rb_delete_fixup(t, x);
+}
+
+// does not work correctly: uses nullptrs and so is prone to segfaults
+template <typename T>
+void rb_delete_fixup(gen_rb_tree<T> &t, gen_rb_node<T> *x) {
+  while (x != t.root && x->black == true) {
+    if (x == x->parent->left) {
+      gen_rb_node<T> *w = x->parent->right;
+      if (w->black == false) {
+        w->black = true;
+        x->parent->black = false;
+        left_rotate(t, x->parent);
+        w = x->parent->right;
+      }
+      if (w->left->black == true && w->right->black == true) {
+        w->black = false;
+        x = x->parent;
+      } else {
+        if (w->right->black == true) {
+          w->left->black = true;
+          w->black = false;
+          right_rotate(t, w);
+          w = x->parent->right;
+        }
+        w->black = x->parent->black;
+        x->parent->black = true;
+        w->right->black = true;
+        left_rotate(t, x->parent);
+        x = t.root;
+      }
+    } else {
+      gen_rb_node<T> *w = x->parent->left;
+      if (w->black == false) {
+        w->black = true;
+        x->parent->black = false;
+        right_rotate(t, x->parent);
+        w = x->parent->left;
+      }
+      if (w->right->black == true && w->left->black == true) {
+        w->black = false;
+        x = x->parent;
+      } else {
+        if (w->left->black == true) {
+          w->right->black = true;
+          w->black = false;
+          left_rotate(t, w);
+          w = x->parent->left;
+        }
+        w->black = x->parent->black;
+        x->parent->black = true;
+        w->right->black = true;
+        right_rotate(t, x->parent);
+        x = t.root;
+      }
+    }
+  }
+  x->black = true;
 }
 
 typedef gen_rb_tree<int> rb_tree;

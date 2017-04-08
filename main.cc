@@ -7,5 +7,8 @@ int main() {
   for (size_t i = 0; i < 20; ++i)
     rb_insert(tree, new rb_node(rand_in_range(0, 20)));
   tree.print();
+  rb_delete(tree, tree.root->left->left);
+  rb_delete(tree, tree.root->right);
+  tree.print();
 }
 
