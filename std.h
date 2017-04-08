@@ -6,6 +6,9 @@
 #include <vector>
 #include <cmath>
 
+#include "rb_tree.h"
+#include "avl_tree.h"
+
 #define die(...) do { printf(__VA_ARGS__); puts(""); exit(1); } while (0)
 
 const int neginf = INT_MIN, inf = INT_MAX;
