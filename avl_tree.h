@@ -1,5 +1,7 @@
 #pragma once
 
+#include <queue>
+
 template <typename T>
 struct gen_avl_node {
   T key;
@@ -82,6 +84,40 @@ class gen_avl_tree {
     x->left = delete_min(x->left);
     return balance(x);
   }
+  void pre_order(gen_avl_node<T> *x, std::vector<T> &acc) {
+    acc.push_back(x->key);
+    if (x->left != nullptr)
+      pre_order(x->left, acc);
+    if (x->right != nullptr)
+      pre_order(x->right, acc);
+  }
+  void in_order(gen_avl_node<T> *x, std::vector<T> &acc) {
+    if (x->left != nullptr)
+      in_order(x->left, acc);
+    acc.push_back(x->key);
+    if (x->right != nullptr)
+      in_order(x->right, acc);
+  }
+  void post_order(gen_avl_node<T> *x, std::vector<T> &acc) {
+    if (x->left != nullptr)
+      post_order(x->left, acc);
+    if (x->right != nullptr)
+      post_order(x->right, acc);
+    acc.push_back(x->key);
+  }
+  void level_order(gen_avl_node<T> *x, std::vector<T> &acc) {
+    std::queue<gen_avl_node<T>*> q;
+    q.push(x);
+    while (!q.empty()) {
+      gen_avl_node<T>* e = q.front();
+      q.pop();
+      acc.push_back(e->key);
+      if (e->left != nullptr)
+        q.push(e->left);
+      if (e->right != nullptr)
+        q.push(e->right);
+    }
+  }
   int _print(gen_avl_node<T> *n, bool is_left, int offset, int depth
       , std::vector<std::string> &s, size_t width) {
     if (n == nullptr)
@@ -129,6 +165,43 @@ public:
     _print(root, 0, 0, 0, s, width);
     for (size_t i = 0; i < s.size(); ++i)
       printf("%s\n", s[i].c_str());
+  }
+  /*
+  void levelorderTraverse() const {
+    std::queue<const TreeNode*> q;
+    q.push(this);
+
+    while(!q.empty()) {
+      const TreeNode* n = q.front();
+      q.pop();
+      std::cout << " " << n->getValue();
+
+      if(n->left())  { q.push(n->left());  }
+      if(n->right()) { q.push(n->right()); }
+    }
+  }
+  */
+  std::vector<T> pre_order(gen_avl_node<T> *x) {
+    std::vector<T> acc;
+    pre_order(x, acc);
+    return acc;
+  }
+  std::vector<T> in_order(gen_avl_node<T> *x) {
+    std::vector<T> acc;
+    in_order(x, acc);
+    return acc;
+  }
+  std::vector<T> post_order(gen_avl_node<T> *x) {
+    std::vector<T> acc;
+    post_order(x, acc);
+    return acc;
+  }
+  std::vector<T> level_order(gen_avl_node<T> *x) {
+    std::vector<T> acc;
+    level_order(x, acc);
+    return acc;
+  }
+  std::vector<T> level_order() {
   }
 };
 
