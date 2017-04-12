@@ -710,3 +710,6 @@ int select(array A, size_t i);
 void k_closest_to_median(array A, size_t k);
 // int small_order_select(array A, size_t i);
 
+int array_equilibrium(array A);
+size_t sum_of_multiples();
+

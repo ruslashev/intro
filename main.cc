@@ -2,11 +2,7 @@
 #include <chrono>
 
 int main() {
-  avl_os_tree tree;
-  for (size_t i = 0; i < 20; ++i)
-    tree.insert(rand_in_range(0, 20));
-  tree.print(100);
-  for (size_t i = 1; i <= 20; ++i)
-    printf("tree.select(%d)->key=%d\n", (int)i, tree.select(i)->key);
+  array A = { -1, 3, -4, 5, 1, -6, 2, 1 };
+  printf("array_equilibrium(A)=%d\n", array_equilibrium(A));
 }
 
