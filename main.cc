@@ -2,7 +2,10 @@
 #include <chrono>
 
 int main() {
-  array A = { -1, 3, -4, 5, 1, -6, 2, 1 };
-  printf("array_equilibrium(A)=%d\n", array_equilibrium(A));
+  array p = { 1, 5, 8, 9, 10, 17, 17, 20, 24, 30 };
+  array p2(2000);
+  p2.randomize_walk(0, 3);
+  int n = 1100;
+  printf("cut_rod3(p2, %d)=%d\n", n, cut_rod3(p2, n));
 }
 

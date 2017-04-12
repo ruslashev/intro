@@ -679,6 +679,9 @@ public:
 
 typedef gen_bst<int> bst;
 
+int array_equilibrium(array A);
+size_t sum_of_multiples();
+
 mvalue search(array &A, int v);
 void insertion_sort(array &A);
 void selection_sort(array &A);
@@ -709,7 +712,7 @@ int randomized_select_iterative(array A, size_t i);
 int select(array A, size_t i);
 void k_closest_to_median(array A, size_t k);
 // int small_order_select(array A, size_t i);
-
-int array_equilibrium(array A);
-size_t sum_of_multiples();
+int cut_rod1(array p, size_t n);
+int cut_rod2(array p, size_t n);
+int cut_rod3(array p, size_t n);
 
