@@ -12,6 +12,9 @@
 
 #define die(...) do { printf(__VA_ARGS__); puts(""); exit(1); } while (0)
 
+typedef long long int ll;
+typedef unsigned long long int ull;
+
 const int neginf = INT_MIN, inf = INT_MAX;
 
 static int rand_in_range(int min, int max) {
@@ -715,4 +718,8 @@ void k_closest_to_median(array A, size_t k);
 int cut_rod1(array p, size_t n);
 int cut_rod2(array p, size_t n);
 int cut_rod3(array p, size_t n);
+int cut_rod_with_cost(array p, int c, size_t n);
+ull fib(int i);
+ull fib_dp(int i);
+ull fib_dp2(int i);
 
