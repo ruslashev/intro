@@ -3,25 +3,31 @@
 #include <queue>
 
 template <typename T>
-struct gen_avl_node {
+struct gen_avl_os_node {
   T key;
-  size_t height;
-  gen_avl_node *left, *right;
-  gen_avl_node(T n_key) : key(n_key), height(1), left(nullptr), right(nullptr) {}
+  size_t height, size;
+  gen_avl_os_node *left, *right;
+  gen_avl_os_node(T n_key)
+    : key(n_key)
+    , height(1)
+    , size(1)
+    , left(nullptr)
+    , right(nullptr) {}
 };
 
 template <typename T>
-class gen_avl_tree {
-  gen_avl_node<T>* insert(gen_avl_node<T> *x, T key) {
+class gen_avl_os_tree {
+  gen_avl_os_node<T>* insert(gen_avl_os_node<T> *x, T key) {
     if (!x)
-      return new gen_avl_node<T>(key);
+      return new gen_avl_os_node<T>(key);
     if (key < x->key)
       x->left = insert(x->left, key);
     else
       x->right = insert(x->right, key);
+    ++x->size;
     return balance(x);
   }
-  gen_avl_node<T>* balance(gen_avl_node<T> *x) {
+  gen_avl_os_node<T>* balance(gen_avl_os_node<T> *x) {
     x->height = std::max(height(x->left), height(x->right)) + 1;
     if (diff(x) >= 2) {
       if (diff(x->right) < 0)
@@ -34,29 +40,36 @@ class gen_avl_tree {
     }
     return x;
   }
-  size_t height(gen_avl_node<T> *x) {
+  size_t height(gen_avl_os_node<T> *x) {
     return x != nullptr ? x->height : 0;
   }
-  int diff(gen_avl_node<T> *x) {
+  size_t size(gen_avl_os_node<T> *x) {
+    return x != nullptr ? x->size : 0;
+  }
+  int diff(gen_avl_os_node<T> *x) {
     return height(x->right) - height(x->left);
   }
-  gen_avl_node<T>* right_rotate(gen_avl_node<T> *x) {
-    gen_avl_node<T> *y = x->left;
+  gen_avl_os_node<T>* right_rotate(gen_avl_os_node<T> *x) {
+    gen_avl_os_node<T> *y = x->left;
     x->left = y->right;
     y->right = x;
     x->height = std::max(height(x->left), height(x->right)) + 1;
     y->height = std::max(height(y->left), height(y->right)) + 1;
+    y->size = x->size;
+    x->size = size(x->left) + size(x->right) + 1;
     return y;
   }
-  gen_avl_node<T>* left_rotate(gen_avl_node<T> *x) {
-    gen_avl_node<T> *y = x->right;
+  gen_avl_os_node<T>* left_rotate(gen_avl_os_node<T> *x) {
+    gen_avl_os_node<T> *y = x->right;
     x->right = y->left;
     y->left = x;
     x->height = std::max(height(x->left), height(x->right)) + 1;
     y->height = std::max(height(y->left), height(y->right)) + 1;
+    y->size = x->size;
+    x->size = size(x->left) + size(x->right) + 1;
     return y;
   }
-  gen_avl_node<T>* delete_key(gen_avl_node<T> *x, T key) {
+  gen_avl_os_node<T>* delete_key(gen_avl_os_node<T> *x, T key) {
     if (x == nullptr)
       return nullptr;
     if (key < x->key)
@@ -64,52 +77,52 @@ class gen_avl_tree {
     else if (key > x->key)
       x->right = delete_key(x->right, key);
     else {
-      gen_avl_node<T> *l = x->left, *r = x->right;
+      gen_avl_os_node<T> *l = x->left, *r = x->right;
       delete x;
       if (r == nullptr)
         return l;
-      gen_avl_node<T> *m = min(r);
+      gen_avl_os_node<T> *m = min(r);
       m->right = delete_min(r);
       m->left = l;
       return balance(m);
     }
     return balance(x);
   }
-  gen_avl_node<T>* min(gen_avl_node<T> *x) {
+  gen_avl_os_node<T>* min(gen_avl_os_node<T> *x) {
     return x->left != nullptr ? min(x->left) : x;
   }
-  gen_avl_node<T>* delete_min(gen_avl_node<T> *x) {
+  gen_avl_os_node<T>* delete_min(gen_avl_os_node<T> *x) {
     if (x->left == nullptr)
       return x->right;
     x->left = delete_min(x->left);
     return balance(x);
   }
-  void pre_order(gen_avl_node<T> *x, std::vector<T> &acc) {
+  void pre_order(gen_avl_os_node<T> *x, std::vector<T> &acc) {
     acc.push_back(x->key);
     if (x->left != nullptr)
       pre_order(x->left, acc);
     if (x->right != nullptr)
       pre_order(x->right, acc);
   }
-  void in_order(gen_avl_node<T> *x, std::vector<T> &acc) {
+  void in_order(gen_avl_os_node<T> *x, std::vector<T> &acc) {
     if (x->left != nullptr)
       in_order(x->left, acc);
     acc.push_back(x->key);
     if (x->right != nullptr)
       in_order(x->right, acc);
   }
-  void post_order(gen_avl_node<T> *x, std::vector<T> &acc) {
+  void post_order(gen_avl_os_node<T> *x, std::vector<T> &acc) {
     if (x->left != nullptr)
       post_order(x->left, acc);
     if (x->right != nullptr)
       post_order(x->right, acc);
     acc.push_back(x->key);
   }
-  void level_order(gen_avl_node<T> *x, std::vector<T> &acc) {
-    std::queue<gen_avl_node<T>*> q;
+  void level_order(gen_avl_os_node<T> *x, std::vector<T> &acc) {
+    std::queue<gen_avl_os_node<T>*> q;
     q.push(x);
     while (!q.empty()) {
-      gen_avl_node<T>* e = q.front();
+      gen_avl_os_node<T>* e = q.front();
       q.pop();
       acc.push_back(e->key);
       if (e->left != nullptr)
@@ -118,7 +131,21 @@ class gen_avl_tree {
         q.push(e->right);
     }
   }
-  int _print(gen_avl_node<T> *n, bool is_left, int offset, int depth
+  size_t children(gen_avl_os_node<T> *x) {
+    if (x == nullptr)
+      return 0;
+    return 1 + children(x->left) + children(x->right);
+  }
+  gen_avl_os_node<T>* select(gen_avl_os_node<T> *x, size_t i) {
+    size_t r = x != nullptr ? size(x->left) + 1 : 0;
+    if (i < r)
+      return select(x->left, i);
+    else if (i > r)
+      return select(x->right, i - r);
+    else
+      return x;
+  }
+  int _print(gen_avl_os_node<T> *n, bool is_left, int offset, int depth
       , std::vector<std::string> &s, size_t width) {
     if (n == nullptr)
       return 0;
@@ -148,8 +175,8 @@ class gen_avl_tree {
     return left_w + node_info_w + right_w;
   }
 public:
-  gen_avl_node<T> *root;
-  gen_avl_tree() : root(nullptr) {}
+  gen_avl_os_node<T> *root;
+  gen_avl_os_tree() : root(nullptr) {}
   void insert(T key) {
     root = insert(root, key);
   }
@@ -166,28 +193,31 @@ public:
     for (size_t i = 0; i < s.size(); ++i)
       printf("%s\n", s[i].c_str());
   }
-  std::vector<T> pre_order(gen_avl_node<T> *x) {
+  std::vector<T> pre_order(gen_avl_os_node<T> *x) {
     std::vector<T> acc;
     pre_order(x, acc);
     return acc;
   }
-  std::vector<T> in_order(gen_avl_node<T> *x) {
+  std::vector<T> in_order(gen_avl_os_node<T> *x) {
     std::vector<T> acc;
     in_order(x, acc);
     return acc;
   }
-  std::vector<T> post_order(gen_avl_node<T> *x) {
+  std::vector<T> post_order(gen_avl_os_node<T> *x) {
     std::vector<T> acc;
     post_order(x, acc);
     return acc;
   }
-  std::vector<T> level_order(gen_avl_node<T> *x) {
+  std::vector<T> level_order(gen_avl_os_node<T> *x) {
     std::vector<T> acc;
     level_order(x, acc);
     return acc;
   }
+  gen_avl_os_node<T>* select(size_t i) {
+    return select(root, i);
+  }
 };
 
-typedef gen_avl_node<int> avl_node;
-typedef gen_avl_tree<int> avl_tree;
+typedef gen_avl_os_node<int> avl_os_node;
+typedef gen_avl_os_tree<int> avl_os_tree;
 
