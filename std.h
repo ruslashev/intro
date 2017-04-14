@@ -32,6 +32,13 @@ public:
   } catch (...) {
     die("gen_array: failed to allocate memory for constructor");
   }
+  gen_array(size_t n_length, T initial_value) try : length(n_length) {
+    _data = new T [length];
+    for (size_t i = 0; i < length; ++i)
+      _data[i] = initial_value;
+  } catch (...) {
+    die("gen_array: failed to allocate memory for constructor with value");
+  }
   gen_array(std::initializer_list<T> l) try : length(l.size()) {
     _data = new T [length];
     size_t i = 0;
@@ -724,4 +731,6 @@ ull fib_dp(int i);
 ull fib_dp2(int i);
 void matrix_chain_order(std::vector<int> p, matrix &m, matrix &s);
 void longest_common_subsequence(array X, array Y);
+void longest_monotonically_increasing_subsequence_simple(array X);
+void longest_monotonically_increasing_subsequence(std::vector<int> X);
 
