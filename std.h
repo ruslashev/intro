@@ -722,4 +722,5 @@ int cut_rod_with_cost(array p, int c, size_t n);
 ull fib(int i);
 ull fib_dp(int i);
 ull fib_dp2(int i);
+void matrix_chain_order(std::vector<int> p, matrix &m, matrix &s);
 
