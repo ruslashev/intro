@@ -723,4 +723,5 @@ ull fib(int i);
 ull fib_dp(int i);
 ull fib_dp2(int i);
 void matrix_chain_order(std::vector<int> p, matrix &m, matrix &s);
+void longest_common_subsequence(array X, array Y);
 
