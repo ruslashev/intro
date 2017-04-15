@@ -741,4 +741,6 @@ void matrix_chain_order(std::vector<int> p, matrix &m, matrix &s);
 void longest_common_subsequence(array X, array Y);
 void longest_monotonically_increasing_subsequence_simple(array X);
 void longest_monotonically_increasing_subsequence(std::vector<int> X);
+size_t edit_distance_simple(std::string a, std::string b);
+size_t edit_distance(std::string a, std::string b);
 
