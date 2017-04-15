@@ -743,4 +743,5 @@ void longest_monotonically_increasing_subsequence_simple(array X);
 void longest_monotonically_increasing_subsequence(std::vector<int> X);
 size_t edit_distance_simple(std::string a, std::string b);
 size_t edit_distance(std::string a, std::string b);
+void string_breaking(size_t n, array p);
 

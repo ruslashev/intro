@@ -2,6 +2,7 @@
 #include <chrono>
 
 int main() {
-  printf("edit_distance(\"kitten\", \"sitting\")=%d\n", (int)edit_distance("kitten", "sitting"));
+  array p = { 2, 8, 10 };
+  string_breaking(20, p);
 }
 
