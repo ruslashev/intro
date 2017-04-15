@@ -47,6 +47,14 @@ public:
   } catch (...) {
     die("gen_array: failed to allocate memory from initializer list");
   }
+  gen_array(std::vector<T> l) try : length(l.size()) {
+    _data = new T [length];
+    size_t i = 0;
+    for (const auto &e : l)
+      _data[i++] = e;
+  } catch (...) {
+    die("gen_array: failed to allocate memory from initializer list");
+  }
   gen_array(const gen_array &other) {
     operator=(other);
   }
