@@ -168,6 +168,15 @@ public:
   } catch (...) {
     die("gen_matrix: failed to allocate memory for initializer list");
   }
+  gen_matrix(size_t n_rows, size_t n_columns, T initial_value) try
+    : rows(n_rows)
+    , columns(n_columns) {
+    _data = new T [rows * columns];
+    for (size_t i = 0; i < rows * columns; ++i)
+      _data[i] = initial_value;
+  } catch (...) {
+    die("gen_matrix: failed to allocate memory for constructor");
+  }
   gen_matrix(const gen_matrix &other) {
     operator=(other);
   }
@@ -695,6 +704,10 @@ public:
   }
 };
 
+struct activity {
+  int s, f;
+};
+
 typedef gen_bst<int> bst;
 
 int array_equilibrium(array A);
@@ -744,4 +757,7 @@ void longest_monotonically_increasing_subsequence(std::vector<int> X);
 size_t edit_distance_simple(std::string a, std::string b);
 size_t edit_distance(std::string a, std::string b);
 void string_breaking(size_t n, array p);
+std::vector<activity> activity_selection_rec(std::vector<activity> S);
+std::vector<activity> activity_selection_gr(std::vector<activity> S);
+std::vector<activity> activity_selection_dp(std::vector<activity> S);
 
