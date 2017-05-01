@@ -1,10 +1,11 @@
 #pragma once
 
-#include <fstream>
-#include <cstring>
 #include <climits>
-#include <vector>
 #include <cmath>
+#include <cstring>
+#include <fstream>
+#include <set>
+#include <vector>
 
 #include "rb_tree.h"
 #include "avl_tree.h"
@@ -760,4 +761,5 @@ void string_breaking(size_t n, array p);
 std::vector<activity> activity_selection_rec(std::vector<activity> S);
 std::vector<activity> activity_selection_gr(std::vector<activity> S);
 std::vector<activity> activity_selection_dp(std::vector<activity> S);
+void activity_halls_select(std::vector<activity> S);
 
