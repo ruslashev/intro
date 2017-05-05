@@ -764,5 +764,7 @@ std::vector<activity> activity_selection_dp(std::vector<activity> S);
 void activity_halls_select(std::vector<activity> S);
 void binary_knapsack(int max_weight, array weights, array values);
 int change_coins(int x, int q, int d, int n, int p);
-int change_arb_coins(int x, std::vector<std::pair<int,int>> coins);
+int change_arb_coins_naive(int x, std::vector<std::pair<int,int>> coins);
+int change_arb_coins_memo(int x, std::vector<std::pair<int,int>> coins);
+int change_arb_coins_bu(int x, std::vector<std::pair<int,int>> coins);
 

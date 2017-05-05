@@ -24,10 +24,63 @@ int change_arb_coins_naive(int x, std::vector<std::pair<int,int>> coins) {
   int m = inf;
   for (size_t i = 0; i < coins.size(); ++i) {
     int coin = coins[i].first,
-        q = change_arb_coins(x - coin, coins) + 1;
+        q = change_arb_coins_naive(x - coin, coins) + 1;
     if (q < m)
       m = q;
   }
   return m;
+}
+
+static int change_arb_coins_memo_aux(int x,
+    std::vector<std::pair<int,int>> coins, std::vector<int> S) {
+  if (S[x] >= 0)
+    return S[x];
+  int r;
+  if (x <= 0)
+    r = 0;
+  else {
+    r = inf;
+    for (size_t i = 0; i < coins.size(); ++i) {
+      int coin = coins[i].first,
+          q = change_arb_coins_memo_aux(x - coin, coins, S) + 1;
+      if (q < r)
+        r = q;
+    }
+  }
+  S[x] = r;
+  return r;
+}
+
+int change_arb_coins_memo(int x, std::vector<std::pair<int,int>> coins) {
+  std::vector<int> S(x + 1, -1);
+  S[0] = 0;
+  return change_arb_coins_memo_aux(x, coins, S);
+}
+
+int change_arb_coins_bu(int x, std::vector<std::pair<int,int>> coins) {
+  std::vector<int> S(x + 1);
+  for (int i = 0; i <= x; ++i)
+    if (i == 0)
+      S[i] = 0;
+    else {
+      int m = inf, c = -1;
+      for (size_t j = 0; j < coins.size(); ++j) {
+        if (coins[j].second <= 0)
+          continue;
+        int coin = coins[j].first, q;
+        if (i - coin >= 0) {
+          q = S[i - coin] + 1;
+          if (q < m) {
+            m = q;
+            c = j;
+          }
+        }
+      }
+      if (c == -1)
+        die("no more coins");
+      --coins[c].second;
+      S[i] = m;
+    }
+  return S[x];
 }
 
