@@ -763,4 +763,5 @@ std::vector<activity> activity_selection_gr(std::vector<activity> S);
 std::vector<activity> activity_selection_dp(std::vector<activity> S);
 void activity_halls_select(std::vector<activity> S);
 void binary_knapsack(int max_weight, array weights, array values);
+int change_coins(int x, int q, int d, int n, int p);
 
