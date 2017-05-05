@@ -58,8 +58,9 @@ int change_arb_coins_memo(int x, std::vector<std::pair<int,int>> coins) {
 }
 
 int change_arb_coins_bu(int x, std::vector<std::pair<int,int>> coins) {
-  std::vector<int> S(x + 1);
-  for (int i = 0; i <= x; ++i)
+  std::vector<int> S(x + 1), history(x + 1);
+  for (int i = 0; i <= x; ++i) {
+    // copy coins vector for this iteration?
     if (i == 0)
       S[i] = 0;
     else {
@@ -67,9 +68,9 @@ int change_arb_coins_bu(int x, std::vector<std::pair<int,int>> coins) {
       for (size_t j = 0; j < coins.size(); ++j) {
         if (coins[j].second <= 0)
           continue;
-        int coin = coins[j].first, q;
+        int coin = coins[j].first;
         if (i - coin >= 0) {
-          q = S[i - coin] + 1;
+          int q = S[i - coin] + 1;
           if (q < m) {
             m = q;
             c = j;
@@ -80,7 +81,15 @@ int change_arb_coins_bu(int x, std::vector<std::pair<int,int>> coins) {
         die("no more coins");
       --coins[c].second;
       S[i] = m;
+      history[i] = coins[c].first;
     }
+  }
+  for (size_t i = x; i != 0;) {
+    int c = history[i];
+    printf("%d ", c);
+    i -= c;
+  }
+  puts("");
   return S[x];
 }
 
