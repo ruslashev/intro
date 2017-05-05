@@ -18,3 +18,16 @@ int change_coins(int x, int q, int d, int n, int p) {
   return c;
 }
 
+int change_arb_coins_naive(int x, std::vector<std::pair<int,int>> coins) {
+  if (x <= 0)
+    return 0;
+  int m = inf;
+  for (size_t i = 0; i < coins.size(); ++i) {
+    int coin = coins[i].first,
+        q = change_arb_coins(x - coin, coins) + 1;
+    if (q < m)
+      m = q;
+  }
+  return m;
+}
+

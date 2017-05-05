@@ -2,6 +2,7 @@
 #include <chrono>
 
 int main() {
-  change_coins(100, 4, 0, 0, 0);
+  int q = change_arb_coins(6, { { 1, 10 }, { 3, 10 }, { 4, 10 } });
+  printf("q=%d\n", q);
 }
 
