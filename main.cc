@@ -2,11 +2,19 @@
 #include <chrono>
 
 int main() {
-  btree T(2);
-  T.insert(1);
-  T.insert(5);
-  T.insert(3);
-  T.insert(2);
-  T.print();
+  fib_heap h;
+  h.insert(3);
+  h.insert(5);
+  h.insert(1);
+  h.insert(2);
+  h.print();
+  printf("h.get_min()->value=%d\n", h.get_min()->value);
+  h.extract_min();
+  printf("h.get_min()->value=%d\n", h.get_min()->value);
+  h.extract_min();
+  printf("h.get_min()->value=%d\n", h.get_min()->value);
+  h.extract_min();
+  printf("h.get_min()->value=%d\n", h.get_min()->value);
+  h.extract_min();
 }
 
