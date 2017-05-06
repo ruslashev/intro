@@ -12,6 +12,7 @@
 #include "avl_os_tree.h"
 #include "b-tree.h"
 #include "fib_heap.h"
+#include "veb_tree.h"
 
 #define die(...) do { printf(__VA_ARGS__); puts(""); exit(1); } while (0)
 

@@ -305,7 +305,7 @@ public:
     delete x;
     t->unlink();
   }
-  void set_key(T key, T new_key){
+  void change_key(T key, T new_key){
     gen_fib_heap_node<T> *x = find(key);
     if (!x)
       return;
