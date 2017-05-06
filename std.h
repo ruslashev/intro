@@ -10,6 +10,7 @@
 #include "rb_tree.h"
 #include "avl_tree.h"
 #include "avl_os_tree.h"
+#include "b-tree.h"
 
 #define die(...) do { printf(__VA_ARGS__); puts(""); exit(1); } while (0)
 
