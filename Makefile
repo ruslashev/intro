@@ -7,7 +7,7 @@ all: out
 .objs/%.o: ./%.cc
 	@mkdir -p .objs
 	@echo "Compiling $<"
-	@$(CXX) -c -o $@ $< -Wall -Wextra -Wpedantic -g -std=c++0x
+	@$(CXX) -c -o $@ $< -Wall -Wextra -Wpedantic -Wno-unused-function -g -std=c++0x
 
 out: $(OBJS)
 	@echo "Linking to $@"
