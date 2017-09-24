@@ -1,25 +1,13 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-
 typedef unsigned long long ull;
 typedef long long ll;
-
 typedef vector<int> vi;
-
+typedef vector<vector<int>> vi;
 #define PB push_back
-
-#define REP(i,a,b) for (int i = a; i <= b; ++i)
-#define REPx(i,a,b) for (int i = a; i < b; ++i)
-
-int arithmetic_progression_sum(int a1, int d, size_t n) {
-  return ((2 * a1 + d * (n - 1)) * n) / 2;
-}
-
-int int_sequence_sum(size_t n) {
-  return arithmetic_progression_sum(1, 1, n);
-  // return ((n + 1) * n) / 2;
-}
+#define REPi(i,a,b) for (int i = a; i <= b; ++i)
+#define REP(i,a,b) for (int i = a; i < b; ++i)
 
 int main() {
 }
