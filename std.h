@@ -1,6 +1,7 @@
 #pragma once
 
 #include <climits>
+#include <cassert>
 #include <cmath>
 #include <cstring>
 #include <fstream>
